@@ -12,7 +12,7 @@ This is a simple example where one provides a collection concept ID (assuming on
 In this case we will be searching the Suomi-NPP ATMS Brightness Temperature collection (`C1442068516-GES_DISC`) over Southeast Asia for March 1, 2020.
 
 
-```
+```python
 import simplecmr as scmr
 
 # construct query
