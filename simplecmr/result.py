@@ -101,7 +101,7 @@ class Granules:
         Kwargs:
             directory (string): relative or absolute path to download files too,
                 default = current working directory
-            limit (int): maximum number of granules to get,
+            limit (int): maximum number of granules to download,
                 default = None (get all granules)
             marWorkers (int): maximum threads to execute granule fetching asynchronously,
                 default = 2
