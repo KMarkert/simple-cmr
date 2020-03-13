@@ -47,11 +47,13 @@ class Query:
         if (startTime is not None) or (endTime is not None):
             temporalExtent = ','
             if startTime is not None:
-                sDt = utils.decode_date(startTime)
-                temporalExtent = sDt.strftime(
+                if type(startTime) is not datetime.datetime:
+                    startTime = utils.decode_date(startTime)
+                temporalExtent = startTime.strftime(
                     "%Y-%m-%dT%H:%M:%SZ") + temporalExtent
             if endTime is not None:
-                eDt = utils.decode_date(endTime)
+                if type(endTime) is not datetime.datetime:
+                    endTime = utils.decode_date(endTime)
                 temporalExtent = temporalExtent + \
                     eDt.strftime("%Y-%m-%dT%H:%M:%SZ")
             # add temporal information to the request parameters
