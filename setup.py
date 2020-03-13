@@ -16,6 +16,10 @@ setup(name='simplecmr',
       license='MIT',
       zip_safe=False,
       include_package_data=False,
+      install_requires=[
+          'requests',
+          'requests-cache'
+      ],
       #entry_points={
       #  'console_scripts': [
       #      'simplecmr = simplecmr.cli:main',
