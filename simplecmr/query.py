@@ -2,17 +2,17 @@ import os
 import json
 import time
 import warnings
-import requests
 import datetime
+import requests
+import requests_cache
 from pprint import pformat
-
 from simplecmr import utils
 from simplecmr.result import Collections, Granules
 
 
 class Query:
     def __init__(self, conceptid=None, shortName=None, spatialExtent=None,
-                 startTime=None, endTime=None, maxResults=10):
+                 startTime=None, endTime=None, maxResults=10,cache=True):
         """
 
         """
@@ -20,6 +20,10 @@ class Query:
         # setting basic parameters for a query
         self.BASE_URL = "https://cmr.earthdata.nasa.gov/search"
         self.FORMAT = 'umm_json_v1_4'
+
+        if cache:
+            expire_after = datetime.timedelta(hours=1)
+            requests_cache.install_cache(backend='memory',expire_after=expire_after)
 
         payload = {}
 
