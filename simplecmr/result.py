@@ -132,6 +132,42 @@ class Granules:
 
         return
 
+    def getLocalPaths(self,directory='./', limit=None):
+        """
+        Method to construct local paths from granules,
+        used for getting a potential list of files that are downloaded from `Granules.fetch()`
+
+        Args:
+            None
+
+        Kwargs:
+            directory (string): relative or absolute path to download files too,
+                default = current working directory
+            limit (int): maximum number of granules to download,
+                default = None (get all granules)
+
+        Returns:
+            paths (tuple): tuple of all local paths for granules
+        """
+
+        if limit is not None:
+            maxIters = min(limit, len(self.items))
+        else:
+            maxIters = len(self.items)
+
+        outDir = Path(directory)
+
+        itemsToGet = self.items[:maxIters]
+
+        paths = []
+        for item in itemsToGet:
+            source = self._parseDataSource(item)
+            _, fileName = os.path.split(source['URL'])
+            outPath = outDir / fileName
+            paths.append(outPath)
+
+        return tuple(paths)
+
     @staticmethod
     def _granule_request(item, credentials, outDir):
         """
@@ -143,17 +179,22 @@ class Granules:
             outDir (pathlib.Path): out directory to save data too
         """
 
-        urls = item['RelatedUrls']
-        source = dict([('URL', url['URL'])
-                       for url in urls if url['Type'] == 'GET DATA'])
+        source = self._parseDataSource(item)
         with requests.Session() as s:
             s.auth = credentials
             authGateway = s.request('get', source['URL'])
             r = s.get(authGateway.url, auth=credentials)
 
             _, fileName = os.path.split(source['URL'])
-
             outFile = outDir / fileName
             outFile.write_bytes(r.content)
 
         return
+
+    @staticmethod
+    def _parseDataSource(item):
+        urls = item['RelatedUrls']
+        source = dict([('URL', url['URL'])
+                       for url in urls if url['Type'] == 'GET DATA'])
+
+        return source
