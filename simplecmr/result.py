@@ -117,9 +117,9 @@ class Granules:
 
 
         if limit is not None:
-            maxIters = min(limit, len(self.items))
+            maxIters = min(limit, self.length)
         else:
-            maxIters = len(self.items)
+            maxIters = self.length
 
         outDir = Path(directory)
 
@@ -177,13 +177,16 @@ class Granules:
             item (dict): Granule response
             credentials(list|tuple): Earthdata username and password needed to download data
             outDir (pathlib.Path): out directory to save data too
+
+        Returns:
+            None
         """
 
-        source = self._parseDataSource(item)
+        source = Granules._parseDataSource(item)
         with requests.Session() as s:
             s.auth = credentials
             authGateway = s.request('get', source['URL'])
-            r = s.get(authGateway.url, auth=credentials)
+            r = s.request('get',authGateway.url, auth=credentials)
 
             _, fileName = os.path.split(source['URL'])
             outFile = outDir / fileName
@@ -193,6 +196,17 @@ class Granules:
 
     @staticmethod
     def _parseDataSource(item):
+        """
+        Helper method to extract granule download URL from response dictionary
+
+        Args:
+            item (dict): Granule response
+
+        Returns:
+            source (dict): Dictionary with key of `URL` that contains the granule
+                download url
+
+        """
         urls = item['RelatedUrls']
         source = dict([('URL', url['URL'])
                        for url in urls if url['Type'] == 'GET DATA'])
