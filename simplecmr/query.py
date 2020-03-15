@@ -55,7 +55,7 @@ class Query:
                 if type(endTime) is not datetime.datetime:
                     endTime = utils.decode_date(endTime)
                 temporalExtent = temporalExtent + \
-                    eDt.strftime("%Y-%m-%dT%H:%M:%SZ")
+                    endTime.strftime("%Y-%m-%dT%H:%M:%SZ")
             # add temporal information to the request parameters
             payload['temporal'] = temporalExtent
 
