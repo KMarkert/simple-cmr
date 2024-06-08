@@ -1,4 +1,7 @@
 # simple-cmr
+
+🚨 **This repo is no longer under development and is archived. There another repository with similar goals that is actively suported at https://github.com/nasa/python_cmr. Please use that package instead of this one.** 🚨
+
 Python package to query NASA's Common Metadata Repository with a simple and intuitive API
 
 ## Philosophy
